@@ -27,7 +27,10 @@ jobs:
           AUTH=$(curl -s -X POST https://api.cloudways.com/api/v1/oauth/access_token \
             --data-urlencode "email=$EMAIL" --data-urlencode "api_key=$API_KEY")
           TOKEN=$(echo "$AUTH" | jq -r '.access_token // empty' 2>/dev/null)
-          if [ -z "$TOKEN" ]; then echo "::error::Cloudways sign-in failed. Check CLOUDWAYS_EMAIL (${#EMAIL} characters, domain ${EMAIL#*@}) and CLOUDWAYS_API_KEY (${#API_KEY} characters). Cloudways said: $(echo "$AUTH" | head -c 300)"; exit 1; fi
+          if [ -z "$TOKEN" ]; then
+            echo "Email + key sign-in didn't work, trying the key as a ready-made access token."
+            TOKEN="$API_KEY"
+          fi
           PULL=$(curl -s -w ' [HTTP %{http_code}]' -X POST https://api.cloudways.com/api/v1/git/pull \
             -H "Authorization: Bearer $TOKEN" \
             --data-urlencode "server_id=$SERVER_ID" \
@@ -38,5 +41,5 @@ jobs:
           echo "$PULL"
           case "$PULL" in
             *"[HTTP 2"*) echo "::notice::Cloudways is pulling the latest code." ;;
-            *) echo "::error::Cloudways didn't accept the update. Check the server and app IDs, and that Deployment via Git is set up for this app. Cloudways said: $(echo "$PULL" | head -c 300)"; exit 1 ;;
+            *) echo "::error::Cloudways didn't accept the update (sign-in said: $(echo "$AUTH" | head -c 150)). Check the server and app IDs, and that Deployment via Git is set up for this app. Cloudways said: $(echo "$PULL" | head -c 300)"; exit 1 ;;
           esac
