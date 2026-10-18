@@ -19,6 +19,17 @@ $secret = fn(string $k) => setting($k) !== '' ? '••••••••' : '';
   $invites = all('SELECT * FROM invites WHERE accepted_at IS NULL AND revoked_at IS NULL ORDER BY created_at DESC');
   $active = count(array_filter($members, fn($m) => $m['status'] === 'active' && !$m['is_sample'])); ?>
   <div class="space-y-10">
+    <section class="card flex flex-wrap items-center justify-between gap-3 p-4" data-testid="open-signup">
+      <div class="min-w-0 flex-1">
+        <h2 class="font-bold"><?= open_signup() ? 'Anyone can join right now' : 'Invite only' ?></h2>
+        <p class="mt-0.5 text-sm text-mute"><?= open_signup() ? 'Anyone who enters their email on the sign-in page can join. No invite needed.' : 'Only people you invite can join.' ?></p>
+      </div>
+      <form method="post" action="/admin/open-signup">
+        <?= csrf_field() ?>
+        <input type="hidden" name="on" value="<?= open_signup() ? '0' : '1' ?>">
+        <button class="<?= open_signup() ? 'btn-ghost' : 'btn-primary' ?>"><?= open_signup() ? 'Switch to invite only' : 'Let anyone join' ?></button>
+      </form>
+    </section>
     <section>
       <h2 class="mb-1 font-bold">Invite someone</h2>
       <p class="mb-4 text-sm text-mute">They'll get an email with a private link. They can join with Google or an email sign-in link.</p>

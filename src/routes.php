@@ -502,6 +502,9 @@ function action_admin(string $action): void {
             insert('invites', $inv);
             if ($existing) q("UPDATE users SET status = 'active' WHERE email = ?", [$email]);
             $back('members', send_invite_email($inv, $me['name']) ? "Invite sent to $email." : "Invite created, but the email didn't send. Copy the link below and send it yourself.");
+        case 'open-signup':
+            set_setting('open_signup', post('on') === '1' ? '1' : '0');
+            $back('members', post('on') === '1' ? 'Sign-up is open. Anyone with an email can join.' : "Back to invite only. People who already joined stay members.");
         case 'resend':
             if ($inv = one('SELECT * FROM invites WHERE id = ?', [post('id')])) {
                 q('UPDATE invites SET expires_at = ? WHERE id = ?', [gmdate('Y-m-d\TH:i:s.000\Z', time() + 14 * 86400), $inv['id']]);

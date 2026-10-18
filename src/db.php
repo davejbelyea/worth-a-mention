@@ -66,7 +66,7 @@ function set_setting(string $name, string $value): void {
     upsert('settings', ['name' => $name, 'val' => $value], ['name']);
 }
 
-const DEFAULT_SETTINGS = ['digest_enabled' => '1', 'digest_time' => '08:00'];
+const DEFAULT_SETTINGS = ['digest_enabled' => '1', 'digest_time' => '08:00', 'open_signup' => '1'];
 
 const DEFAULT_CATEGORIES = [
     ['movies', 'Movies', '🎬', 0], ['tv', 'TV', '📺', 0], ['music', 'Music', '🎧', 0],

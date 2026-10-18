@@ -10,7 +10,7 @@ This version is plain PHP + MySQL, so it runs on an ordinary PHP host like a **C
 
 ## What's in it
 
-- **Invite-only sign-in** with Google or an emailed sign-in link. Nobody gets in without an invite from the founder.
+- **Sign-in** with Google or an emailed sign-in link. The founder can let anyone with an email join, or switch to invite only (Settings → Members).
 - **Home feed, browse and search** with filters for category, who added it, rating, location (New England by state, or elsewhere) and tags.
 - **Add a recommendation** by typing a name or pasting a link. Links fill in the title, picture and description automatically when the website allows it. If someone tries to add something that's already there, the site points them to the original.
 - **Recommendation pages** with photos, links, a personal note, star ratings from each member (changeable any time), the group average, comments, and a "want to try" list.
@@ -96,7 +96,7 @@ The site also checks on its own whenever someone visits, so this is a backup tha
 
 ### 8. Invite the group
 
-**Settings → Members → Invite someone.** Each person gets a private invite link that works with Google or email. When you're ready to launch, go to **Settings → Content → Remove all sample content**.
+Right now anyone who enters their email on the sign-in page can join. To make it invite only, go to **Settings → Members → Switch to invite only**. Then use **Invite someone**: each person gets a private invite link that works with Google or email. (While sign-up is open and email isn't connected, people who already have an account need Google or a real emailed link to sign back in, so nobody can type in someone else's address.) When you're ready to launch, go to **Settings → Content → Remove all sample content**.
 
 ### When you get a domain
 

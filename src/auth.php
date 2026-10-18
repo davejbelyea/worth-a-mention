@@ -58,11 +58,15 @@ function find_open_invite(string $tok): ?array {
     return $i;
 }
 
+/** When on, anyone with an email address can join without an invite (the founder can switch it off in Settings → Members). */
+function open_signup(): bool { return setting('open_signup') === '1'; }
+
 function email_allowed(string $email): bool {
     $email = strtolower(trim($email));
     if (admin_email() && $email === admin_email()) return true;
     $u = one('SELECT status FROM users WHERE email = ?', [$email]);
     if ($u) return $u['status'] === 'active';
+    if (open_signup()) return true;
     return (bool) one('SELECT id FROM invites WHERE email = ? AND accepted_at IS NULL AND revoked_at IS NULL AND expires_at > ?', [$email, now()]);
 }
 
@@ -79,7 +83,7 @@ function complete_sign_in(string $email, ?string $name = null, ?string $image = 
     $invite = $inviteToken ? find_open_invite($inviteToken) : null;
     $invite ??= one('SELECT * FROM invites WHERE email = ? AND accepted_at IS NULL AND revoked_at IS NULL AND expires_at > ? ORDER BY created_at DESC', [$email, now()]);
     $founder = admin_email() && $email === admin_email();
-    if (!$invite && !$founder) return [null, 'not-invited', false];
+    if (!$invite && !$founder && !open_signup()) return [null, 'not-invited', false];
 
     $fallback = preg_split('/[._+-]/', explode('@', $email)[0])[0];
     $id = new_id();
@@ -99,6 +103,10 @@ function send_magic_link(string $email, ?string $next = null, ?string $inviteTok
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) return [false, 'invalid', null];
     $invite = $inviteToken ? find_open_invite($inviteToken) : null;
     if (!$invite && !email_allowed($email)) return [false, 'not-invited', null];
+    // With sign-up open and no email service, the link is shown on screen, so anyone could type a member's address
+    // and walk into their account. Only brand-new addresses (or invite links, which are secret) get the on-screen link.
+    $onScreen = !email_enabled();
+    if ($onScreen && open_signup() && !$invite && one('SELECT id FROM users WHERE email = ?', [$email])) return [false, 'needs-email', null];
     if ((int) val('SELECT COUNT(*) FROM login_tokens WHERE email = ? AND created_at > ?', [$email, iso_ago(1 / 24)]) >= 6) return [false, 'too-many', null];
     $t = token();
     insert('login_tokens', ['token_hash' => sha($t), 'email' => $email, 'next_path' => safe_next($next), 'invite_token' => $invite['token'] ?? null, 'created_at' => now(), 'expires_at' => gmdate('Y-m-d\TH:i:s.000\Z', time() + 1200)]);
@@ -106,7 +114,7 @@ function send_magic_link(string $email, ?string $next = null, ?string $inviteTok
     send_email($email, 'Your sign-in link for Worth a Mention',
         simple_email('Come on in.', 'Tap the button to sign in. The link works once and expires in 20 minutes.', 'Sign in to Worth a Mention', $url),
         "Sign in to Worth a Mention: $url\n\nThe link works once and expires in 20 minutes.");
-    return [true, null, email_enabled() ? null : $url];
+    return [true, null, $onScreen ? $url : null];
 }
 
 function consume_magic_link(string $t): ?array {
@@ -126,6 +134,7 @@ function send_invite_email(array $inv, string $inviter) {
 
 const AUTH_ERRORS = [
     'not-invited' => "That address isn't on the guest list yet. Ask the group's founder for an invite.",
+    'needs-email' => "That address already has an account, and email isn't connected yet, so we can't send the link safely. Use Google, or ask the group's founder to connect email.",
     'removed' => "This account isn't active anymore. If that's a mistake, check with the group's founder.",
     'expired' => 'That link has expired or was already used. Request a fresh one below.',
     'google' => "Google sign-in didn't go through. Give it another try.",
