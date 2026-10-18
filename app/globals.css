@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: var(--font-serif), ui-serif, Georgia, serif;
+
+  --color-bg: #0c0c0f;
+  --color-surface: #141418;
+  --color-raised: #1b1b20;
+  --color-hover: #222228;
+  --color-line: rgb(255 255 255 / 0.08);
+  --color-line-strong: rgb(255 255 255 / 0.14);
+  --color-ink: #ededf0;
+  --color-soft: #b4b4be;
+  --color-mute: #85858f;
+  --color-faint: #5d5d67;
+  --color-gold: #e8b86a;
+  --color-gold-deep: #c9964a;
+  --color-vote: #7fcab5;
+  --color-danger: #ef7d73;
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-bg text-ink font-sans antialiased;
+    font-feature-settings: "cv11", "ss01";
+  }
+  ::selection {
+    background: rgb(232 184 106 / 0.35);
+  }
+  input, textarea, select {
+    font-size: 16px; /* keeps iOS from zooming in */
+  }
+}
+
+@utility card {
+  @apply rounded-2xl border border-line bg-surface;
+}
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50;
+}
+@utility btn-primary {
+  @apply btn bg-gold text-[#1a1408] hover:bg-[#f0c47c];
+}
+@utility btn-ghost {
+  @apply btn border border-line bg-raised text-ink hover:border-line-strong hover:bg-hover;
+}
+@utility btn-quiet {
+  @apply btn text-soft hover:bg-raised hover:text-ink;
+}
+@utility btn-danger {
+  @apply btn border border-danger/30 text-danger hover:bg-danger/10;
+}
+@utility field {
+  @apply w-full rounded-xl border border-line bg-raised px-3.5 py-2.5 text-ink outline-none transition placeholder:text-faint focus:border-gold/60 focus:ring-2 focus:ring-gold/15;
+}
+@utility label {
+  @apply mb-1.5 block text-[13px] font-medium text-soft;
+}
+@utility chip {
+  @apply inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-line bg-raised px-3 py-1.5 text-[13px] text-soft transition hover:border-line-strong hover:text-ink;
+}
+@utility chip-on {
+  @apply border-gold/50 bg-gold/10 text-gold hover:text-gold;
+}
+@utility eyebrow {
+  @apply text-[11px] font-semibold uppercase tracking-[0.14em] text-mute;
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
+
+.pb-safe { padding-bottom: env(safe-area-inset-bottom); }
