@@ -1,0 +1,6 @@
+# If the web root points at this folder instead of /public, forward everything there
+# and keep the app's code, settings and photos out of reach.
+RewriteEngine On
+RewriteRule ^(src|views|storage|bin|tools)(/|$) - [F,L]
+RewriteCond %{REQUEST_URI} !^/public/
+RewriteRule ^(.*)$ public/$1 [L]

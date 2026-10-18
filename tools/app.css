@@ -1,0 +1,90 @@
+@import "tailwindcss";
+@source "../views";
+@source "../src";
+@source "../public/assets/app.js";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+
+  --color-bg: #ffffff;
+  --color-surface: #ffffff;
+  --color-raised: #f7f7f7;
+  --color-hover: #efefef;
+  --color-line: #ebebeb;
+  --color-line-strong: #d6d6d6;
+  --color-ink: #222222;
+  --color-soft: #484848;
+  --color-mute: #6a6a6a;
+  --color-faint: #a3a3a3;
+  --color-gold: #e5484d;
+  --color-gold-deep: #c7353b;
+  --color-vote: #0e8a7d;
+  --color-danger: #c13515;
+}
+
+@layer base {
+  .font-display {
+    font-weight: 700;
+    letter-spacing: -0.025em;
+  }
+  html {
+    color-scheme: light;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-bg text-ink font-sans antialiased;
+    font-feature-settings: "cv11", "ss01";
+  }
+  ::selection {
+    background: rgb(229 72 77 / 0.18);
+  }
+  input, textarea, select {
+    font-size: 16px; /* keeps iOS from zooming in */
+  }
+}
+
+@utility card {
+  @apply rounded-2xl border border-line bg-surface shadow-[0_1px_2px_rgba(0,0,0,0.04),0_6px_16px_rgba(0,0,0,0.04)];
+}
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50;
+}
+@utility btn-primary {
+  @apply btn bg-gradient-to-r from-[#e61e4d] to-[#e5484d] font-semibold text-white hover:from-[#d70466] hover:to-[#e61e4d];
+}
+@utility btn-ghost {
+  @apply btn border border-line-strong bg-white font-semibold text-ink hover:border-ink hover:bg-raised;
+}
+@utility btn-quiet {
+  @apply btn font-semibold text-soft underline-offset-2 hover:bg-raised hover:text-ink;
+}
+@utility btn-danger {
+  @apply btn border border-danger/30 text-danger hover:bg-danger/10;
+}
+@utility field {
+  @apply w-full rounded-xl border border-line-strong bg-white px-3.5 py-2.5 text-ink outline-none transition placeholder:text-faint focus:border-ink focus:ring-2 focus:ring-ink/10;
+}
+@utility label {
+  @apply mb-1.5 block text-[14px] font-semibold text-ink;
+}
+@utility chip {
+  @apply inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-line-strong bg-white px-3.5 py-1.5 text-[13px] font-medium text-soft transition hover:border-ink hover:text-ink;
+}
+@utility chip-on {
+  @apply border-ink bg-ink text-white hover:text-white;
+}
+@utility eyebrow {
+  @apply text-[12px] font-semibold uppercase tracking-[0.08em] text-mute;
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
+
+.pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+
+/* Star hover: light up every star up to the one under the pointer. */
+.stars:hover > button { color: var(--color-gold); }
+.stars > button:hover ~ button { color: var(--color-faint); }
+details > summary::-webkit-details-marker { display: none; }
+.htmx-request button, button.htmx-request { opacity: .6; }

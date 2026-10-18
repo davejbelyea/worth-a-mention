@@ -4,6 +4,8 @@
 
 A private website for a small group of friends to save the recommendations that come up in conversation: restaurants, shows, recipes, trips, and everything in between. Members rate things, comment, mark what they want to try, make shared plans and vote on them, and get a short roundup email every Thursday.
 
+This version is plain PHP + MySQL, so it runs on an ordinary PHP host like a **Cloudways Flexible** server. There's nothing to build or install on the server. (The earlier Node.js version lives on the `nextjs-version` branch.)
+
 ---
 
 ## What's in it
@@ -12,122 +14,106 @@ A private website for a small group of friends to save the recommendations that 
 - **Home feed, browse and search** with filters for category, who added it, rating, location (New England by state, or elsewhere) and tags.
 - **Add a recommendation** by typing a name or pasting a link. Links fill in the title, picture and description automatically when the website allows it. If someone tries to add something that's already there, the site points them to the original.
 - **Recommendation pages** with photos, links, a personal note, star ratings from each member (changeable any time), the group average, comments, and a "want to try" list.
-- **Shared plans** like "Next Dinner Out" where members add options from the site and vote. Votes (teal) are clearly separate from star ratings (gold).
-- **Thursday newsletter**, built from real activity: new recommendations, busy conversations, one older pick worth rediscovering, and upcoming plans. It's emailed to members and saved in an on-site archive. Quiet weeks get a lighter, friendly edition.
-- **Founder settings** for invitations, members, categories, newsletter timing, and removing the sample content.
-- **Sample content** (seven pretend friends, ~28 recommendations, 3 plans, 2 past newsletters) loads on first start so the site doesn't feel empty. Everything sample is marked with a "Sample" tag and can be removed in one click under **Settings → Content**.
-
-## The quick version of setup
-
-You need four things. Only the first is required to get going; the rest you can add whenever.
-
-| What | Why | Cost |
-|---|---|---|
-| **A host** (we suggest Railway) | Runs the website and keeps the data | About $5/month |
-| **Google sign-in keys** | Lets people "Continue with Google" | Free |
-| **Resend** (email service) | Sends invites, sign-in links and the Thursday email | Free for this size group |
-| **A web address** (optional) | e.g. `worthamention.com` instead of a Railway address | ~$12/year |
-
-Until email is connected, every email the site would send gets printed in the server log instead, so you can still copy sign-in and invite links by hand while you set things up.
+- **Shared plans** like "Next Dinner Out" where members add options from the site and vote. Votes (teal) are kept separate from star ratings (coral).
+- **Thursday newsletter**, built from real activity: new recommendations, busy conversations, one older pick worth rediscovering, and upcoming plans. It's emailed to members and saved in an on-site archive.
+- **Founder settings** for invitations, members, categories, newsletter timing, email and Google keys, and removing the sample content.
+- **Sample content** (seven pretend friends, ~28 recommendations, 3 plans, 2 past newsletters) so the site doesn't feel empty. Everything sample is marked "Sample" and removable in one click.
 
 ---
 
-## Step 1, option A: Put it online with Railway
+## Putting it on Cloudways (Flexible)
 
-1. Put this folder in a GitHub repository (private is fine).
-2. Go to [railway.com](https://railway.com), sign in with GitHub, choose **New Project → Deploy from GitHub repo**, and pick the repo.
-3. In the service, open **Settings → Volumes** and add a volume mounted at `/data`. This is where the database and photos live. **Don't skip this**, or the data resets every time the site restarts.
-4. Open **Variables** and add:
-   - `ADMIN_EMAIL` = your email address (you become the founder/administrator)
-   - `DATA_DIR` = `/data`
-   - `APP_URL` = the site's address, e.g. `https://worth-a-mention.up.railway.app` (find it under **Settings → Networking → Generate Domain**; no slash at the end)
-   - `CRON_SECRET` = any long random phrase
-5. Railway builds and starts the site on its own. Visit the address, enter your email, and grab your sign-in link from the **Deploy Logs** (until email is connected).
+You'll use the free Cloudways address for now. Everything below happens in the Cloudways console and your browser. No code editing.
 
-Any host that runs Node.js 20.9+ with a persistent disk works too (Render, Fly.io, a small server). The commands are `npm install`, `npm run build`, `npm start`.
+### 1. Create the app
 
-## Step 1, option B: Put it online with Cloudways
+1. In Cloudways, open your server and click **Add Application**.
+2. Choose **Custom App** (plain PHP). Name it "Worth a Mention".
+3. When it's ready, open the app. On **Access Details** you'll see:
+   - the **Application URL** (something like `https://phpstack-123456-789.cloudwaysapps.com`). That's your temporary web address.
+   - the **MySQL** database name, username and password. Keep this tab open for step 4.
 
-Cloudways runs Node.js apps like this one through its newer **Velocity** product (it's labeled "Public Preview" as of October 2026). You can use the free address Cloudways gives you until you buy a domain.
+### 2. Point the web root at the `public` folder
 
-1. In the Cloudways console, open **Velocity → Get Started** and pick the **Starter** plan (about $20/month, with a 3-day free trial).
-2. Click **Connect Via Git**, sign in with the GitHub account that owns `worth-a-mention`, and choose the repo and the `main` branch.
-3. Cloudways should detect Next.js on its own and pick the **Next.js SSR** preset. If it asks, use build command `npm run build` and start command `npm start`, and Node **22**.
-4. Click **Deploy Now**. When it finishes, copy the **Application URL** from the app's **Overview** tab. That's your temporary web address.
-5. Open the app's **environment variables** and add:
-   - `APP_URL` = that Application URL, starting with `https://`, no slash at the end
-   - `ADMIN_EMAIL` = your email
-   - `CRON_SECRET` = any long random phrase
-   - Leave `DATA_DIR` out for now (the app keeps its data in a `data` folder inside the app)
-   Saving restarts the app.
-6. Visit the address and type in your email. Until email is hooked up, your sign-in link shows up in the app's **logs**.
-7. When you add Google sign-in later, use `https://YOUR-CLOUDWAYS-ADDRESS/auth/google/callback` as the redirect address. When you buy a domain, update `APP_URL` and the Google redirect to match.
+**Application Settings → General → Webroot**: change `public_html` to **`public_html/public`** and save.
 
-**One thing to confirm with Cloudways before you invite everyone.** This app saves posts and photos as files on the server. Cloudways' Velocity pages don't say whether those files survive a redeploy (each time you push new code). Ask their support chat: *"Do files my Node app writes inside its folder persist across redeploys and restarts, and is there a persistent storage path I should use?"* If they give you a path, set `DATA_DIR` to it. If the answer is no, let us know. The app can be switched to their PostgreSQL database plus photo storage so nothing gets lost.
+**Don't skip this.** It keeps the app's settings and private photos out of reach of the web. (There's a safety file that forwards visitors if you forget, but Cloudways can serve images directly without checking it.)
 
-## Step 2: Google sign-in
+### 3. Get the code onto the server
 
-1. Go to [console.cloud.google.com](https://console.cloud.google.com), create a project called "Worth a Mention".
-2. **APIs & Services → OAuth consent screen**: choose **External**, fill in the app name and your email. Under **Audience**, publish the app (or add your eight friends as test users).
-3. **APIs & Services → Credentials → Create credentials → OAuth client ID**, type **Web application**.
-   - Authorized redirect URI: `https://YOUR-SITE/auth/google/callback`
-4. Copy the client ID and secret into Railway as `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`.
+Pick one:
 
-The "Continue with Google" button appears once these are set.
+- **Git (recommended, easy updates):** App → **Deployment via Git**. Cloudways shows an SSH key; add it to GitHub under the repo's **Settings → Deploy keys**. Then enter `git@github.com:davejbelyea/worth-a-mention.git`, branch `main`, deployment path `public_html`, and click **Start Deployment**. Later, "Pull" grabs any updates.
+- **SFTP:** download this repo as a ZIP, unzip it, and upload everything inside it into `public_html` with an SFTP app (Cloudways gives you SFTP login details under Access Details → Application Credentials).
 
-## Step 3: Email (Resend)
+Then click **Application Settings → Reset File Permission** once so the site can save photos and settings.
+
+### 4. Run the setup page
+
+Visit your Application URL. You'll see a one-time setup page:
+
+- Paste the **DB name**, **username** and **password** from Access Details. Host stays `localhost`.
+- The **site address** is filled in for you. Make sure it starts with `https://`.
+- Enter **your email** as the founder.
+- Leave **sample content** checked if you want the site to look lived-in at first.
+
+Click **Finish setup**, then sign in with your email. Until email is connected, your sign-in link appears right on the screen.
+
+> Do this soon after uploading: until setup is finished, anyone who visits the address could fill in that page.
+
+### 5. Turn on the Thursday timer
+
+App → **Cron Job Management → Add New Cron Job**:
+
+- Schedule: every 15 minutes (`*/15 * * * *`)
+- Command: copy it from the site under **Settings (gear icon) → Connections → Newsletter timer**. It looks like `php /home/…/public_html/bin/cron.php`.
+
+The site also checks on its own whenever someone visits, so this is a backup that makes delivery on time.
+
+### 6. Turn on email (Resend)
 
 1. Sign up at [resend.com](https://resend.com).
-2. Add and verify your domain under **Domains** (Resend shows a few DNS records to paste into wherever you bought the domain). If you don't have a domain yet, Resend's test sender only delivers to your own address, so you'll want a domain before inviting people.
-3. Create an API key and add these in Railway:
-   - `RESEND_API_KEY` = the key
-   - `EMAIL_FROM` = `Worth a Mention <hello@yourdomain.com>`
+2. Add and verify a domain under **Domains** (Resend gives you a few DNS records to paste where you bought the domain). Until you have a domain, Resend only delivers to your own address, so you'll want one before inviting people. In the meantime you can copy invite links from Settings and text them to people.
+3. Create an API key.
+4. On the site: **Settings → Connections**. Paste the key and a "Send from" address like `Worth a Mention <hello@yourdomain.com>`. Save, then click **Send me a test email**.
 
-## Step 4: Invite the group
+### 7. Google sign-in (optional)
 
-Sign in, click the gear icon (top right), and use **Members → Invite someone**. Each person gets a private invite link that works with Google or email. You can also copy the link and text it to them.
+1. Go to [console.cloud.google.com](https://console.cloud.google.com) and create a project called "Worth a Mention".
+2. **APIs & Services → OAuth consent screen**: choose **External**, fill in the app name and your email, and publish it (or add your friends as test users).
+3. **Credentials → Create credentials → OAuth client ID**, type **Web application**. For the authorized redirect URI, copy the one shown on the site under **Settings → Connections**.
+4. Paste the client ID and secret into **Settings → Connections** and save. The "Continue with Google" button appears right away.
 
-When you're ready to launch, go to **Settings → Content → Remove all sample content**.
+### 8. Invite the group
+
+**Settings → Members → Invite someone.** Each person gets a private invite link that works with Google or email. When you're ready to launch, go to **Settings → Content → Remove all sample content**.
+
+### When you get a domain
+
+1. In Cloudways, **Domain Management**: add the domain and point its DNS at the server (Cloudways shows the IP). Then **SSL Certificate → Let's Encrypt** for the free https certificate.
+2. Edit `storage/config.php` on the server (SFTP) and change `app_url` to `https://yourdomain.com`.
+3. Update the Google redirect URI to the new address.
 
 ---
 
-## The Thursday newsletter
+## Good to know
 
-- It goes out every Thursday, Eastern time, at the time you set under **Settings → Newsletter** (default 8:00 AM).
-- The site checks every few minutes on its own, so there's nothing extra to schedule. If your host sleeps when idle, set up a free cron service (like cron-job.org) to call `https://YOUR-SITE/api/cron/digest` every 15 minutes with the header `Authorization: Bearer YOUR_CRON_SECRET`.
-- From settings you can preview this week's edition, email a preview to yourself, or send it to everyone right now.
-- Members can turn the email off on their profile page. Every edition also lives in the on-site archive.
+- **Where the data lives:** the MySQL database plus the `storage/uploads` folder (photos). Cloudways server backups cover both.
+- **Privacy:** every page and photo requires a signed-in member, and search engines are told not to index anything. Removing a member signs them out everywhere; their past posts stay, with their name.
+- **The `storage` folder** holds `config.php` (database password and secret keys). It's blocked from the web and ignored by git. Don't delete it, or the setup page comes back.
 
 ## Running it on your own computer
 
+You need PHP 8.1+ with the SQLite extension.
+
 ```bash
-npm install
-cp .env.example .env.local   # then set ADMIN_EMAIL to your address
-npm run dev
+WAM_DB=sqlite php -S localhost:8080 -t public tools/dev-router.php
 ```
 
-Open http://localhost:3000. Sign-in links show right on the screen while email isn't connected.
+Open http://localhost:8080 and the setup page asks for just a site address and founder email.
 
-Handy commands: `npm run seed` (reload the sample content) and `npm run unseed` (remove it).
-
-## Settings reference
-
-| Variable | Required | What it does |
-|---|---|---|
-| `APP_URL` | Yes | Public address of the site, used in emails and sign-in |
-| `ADMIN_EMAIL` | Yes | The founder. Always the administrator |
-| `DATA_DIR` | Yes in production | Folder for the database and photos. Must be a persistent disk |
-| `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | No | Turns on Google sign-in |
-| `RESEND_API_KEY`, `EMAIL_FROM` | No | Turns on real email |
-| `CRON_SECRET` | No | Protects the optional newsletter endpoint |
-| `SKIP_SAMPLE_DATA=1` | No | Start completely empty instead of with sample content |
-
-## Privacy notes
-
-- Every page, photo and API call requires a signed-in member. Search engines are told not to index anything.
-- Removing a member signs them out everywhere and blocks them from getting back in. Their past posts stay, with their name.
-- Backups: the whole site lives in the `DATA_DIR` folder. Copy that folder and you've backed up everything.
+Only if you change the page designs, rebuild the stylesheet with Node: `npm install && npm run css`.
 
 ## Under the hood
 
-Next.js 16 (React 19), SQLite via libSQL, Tailwind CSS 4. No outside services are needed beyond the optional Google and Resend ones above.
+PHP 8 (no frameworks, no Composer), MySQL or MariaDB (SQLite for local testing), htmx for the quick updates (ratings, votes, comments), and Tailwind CSS compiled ahead of time into `public/assets/app.css`.

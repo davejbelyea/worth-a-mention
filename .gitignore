@@ -1,7 +1,6 @@
-node_modules
-.next
-data/
-.env
-.env.local
-*.tsbuildinfo
-next-env.d.ts
+node_modules/
+storage/config.php
+storage/*.sqlite*
+storage/uploads/
+storage/outbox/
+.DS_Store

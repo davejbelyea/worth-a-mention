@@ -1,0 +1,811 @@
+{
+ "PEOPLE": [
+  [
+   "maggie",
+   "Maggie Sullivan"
+  ],
+  [
+   "theo",
+   "Theo Park"
+  ],
+  [
+   "priya",
+   "Priya Raman"
+  ],
+  [
+   "jules",
+   "Jules Moreau"
+  ],
+  [
+   "kevin",
+   "Kevin O'Brien"
+  ],
+  [
+   "sam",
+   "Sam Delgado"
+  ],
+  [
+   "nora",
+   "Nora Fitzgerald"
+  ]
+ ],
+ "RECS": [
+  [
+   "neptune",
+   "Neptune Oyster",
+   "restaurants",
+   "maggie",
+   2,
+   "Get the hot buttered lobster roll, not the cold one. Trust me. Go at 11:30 on a weekday or bring a book for the line.",
+   {
+    "address": "63 Salem St",
+    "city": "Boston",
+    "state": "MA"
+   },
+   "seafood, north end, worth the wait"
+  ],
+  [
+   "pepe",
+   "Frank Pepe Pizzeria Napoletana",
+   "restaurants",
+   "kevin",
+   9,
+   "The white clam pizza is the whole reason to go. Yes it's a drive. Yes it's worth it. Order two.",
+   {
+    "address": "157 Wooster St",
+    "city": "New Haven",
+    "state": "CT"
+   },
+   "pizza, road trip, classic"
+  ],
+  [
+   "alforno",
+   "Al Forno",
+   "restaurants",
+   "nora",
+   34,
+   "Grilled pizza and the baked pastas. Order dessert when you sit down, they make it to order and it takes a while.",
+   {
+    "address": "577 S Main St",
+    "city": "Providence",
+    "state": "RI"
+   },
+   "date night, pasta, order dessert early"
+  ],
+  [
+   "oleana",
+   "Oleana",
+   "restaurants",
+   "priya",
+   18,
+   "The patio in September is about as good as Cambridge gets. Baked Alaska for the table.",
+   {
+    "address": "134 Hampshire St",
+    "city": "Cambridge",
+    "state": "MA"
+   },
+   "patio, mezze, date night"
+  ],
+  [
+   "clamshack",
+   "The Clam Shack",
+   "restaurants",
+   "theo",
+   70,
+   "Lobster roll with butter AND mayo, eaten standing on the bridge. Summer only.",
+   {
+    "address": "2 Western Ave",
+    "city": "Kennebunkport",
+    "state": "ME"
+   },
+   "lobster roll, summer, seafood"
+  ],
+  [
+   "henwood",
+   "Hen of the Wood",
+   "restaurants",
+   "jules",
+   5,
+   "Best meal of our Vermont trip, by a mile. The mushroom dish alone. Book ahead on weekends.",
+   {
+    "address": "55 Cherry St",
+    "city": "Burlington",
+    "state": "VT"
+   },
+   "farm to table, special occasion, book ahead"
+  ],
+  [
+   "sarma",
+   "Sarma",
+   "restaurants",
+   "sam",
+   1,
+   "Small plates, loud room, great cocktails. Let them pick for you and you'll leave happy.",
+   {
+    "address": "249 Pearl St",
+    "city": "Somerville",
+    "state": "MA"
+   },
+   "small plates, cocktails, groups"
+  ],
+  [
+   "woodstock",
+   "A weekend in Woodstock, Vermont",
+   "travel",
+   "nora",
+   12,
+   "Hike Mount Tom in the morning, Billings Farm in the afternoon, cider donuts somewhere in between. Peak foliage is early October but it's lovely any time.",
+   {
+    "city": "Woodstock",
+    "state": "VT"
+   },
+   "fall, weekend, hiking, foliage"
+  ],
+  [
+   "acadia",
+   "Acadia National Park",
+   "travel",
+   "theo",
+   95,
+   "Sunrise on Cadillac Mountain needs a vehicle reservation, so set an alarm the day they open. Jordan Pond popovers after.",
+   {
+    "place_name": "Acadia National Park",
+    "city": "Bar Harbor",
+    "state": "ME"
+   },
+   "hiking, national park, summer"
+  ],
+  [
+   "block",
+   "Block Island day trip",
+   "travel",
+   "maggie",
+   40,
+   "Ferry from Point Judith, rent bikes at the dock, ride to the Mohegan Bluffs. Bring a sweatshirt, the ride back gets cold.",
+   {
+    "city": "New Shoreham",
+    "state": "RI"
+   },
+   "beach, biking, summer, day trip"
+  ],
+  [
+   "ptown",
+   "Provincetown in the off-season",
+   "travel",
+   "jules",
+   26,
+   "November in P-town is the secret. Empty beaches, cozy bars, no traffic on Route 6.",
+   {
+    "city": "Provincetown",
+    "state": "MA"
+   },
+   "off-season, beach, cozy"
+  ],
+  [
+   "montreal",
+   "Montréal long weekend",
+   "travel",
+   "priya",
+   52,
+   "Five hours from Boston. Bagels at St-Viateur, Jean-Talon market, and a walk up Mount Royal. Bring your passport.",
+   {
+    "city": "Montréal",
+    "country": "Canada"
+   },
+   "city break, food, long weekend"
+  ],
+  [
+   "holdovers",
+   "The Holdovers",
+   "movies",
+   "kevin",
+   21,
+   "Set at a Massachusetts prep school in 1970 and it feels like a Christmas movie your dad would love. Paul Giamatti is perfect.",
+   null,
+   "holiday, comedy, new england"
+  ],
+  [
+   "pastlives",
+   "Past Lives",
+   "movies",
+   "priya",
+   64,
+   "Quiet, gorgeous, and it will wreck you a little. Watch it when you can give it your full attention.",
+   null,
+   "drama, romance, tearjerker"
+  ],
+  [
+   "slowhorses",
+   "Slow Horses",
+   "tv",
+   "sam",
+   3,
+   "Gary Oldman as the most disgusting, brilliant spy boss on TV. Each season is six episodes, so it's an easy commitment.",
+   null,
+   "spy, british, binge"
+  ],
+  [
+   "bear",
+   "The Bear",
+   "tv",
+   "theo",
+   46,
+   "Season one is stressful in the best way. Episode seven is one continuous shot and I needed a nap after.",
+   null,
+   "drama, food, intense"
+  ],
+  [
+   "shrinking",
+   "Shrinking",
+   "tv",
+   "maggie",
+   15,
+   "Funny and sweet without being sappy. Harrison Ford grumbling is worth the subscription.",
+   null,
+   "comedy, feel good"
+  ],
+  [
+   "khruangbin",
+   "Khruangbin, Con Todo El Mundo",
+   "music",
+   "jules",
+   7,
+   "Perfect cooking-dinner album. Chill but never boring.",
+   null,
+   "chill, dinner party, vinyl"
+  ],
+  [
+   "carlile",
+   "Brandi Carlile, In These Silent Days",
+   "music",
+   "nora",
+   80,
+   "Saw her at the Boston Calling a few years back and I've been obsessed since. Start with 'Right on Time.'",
+   null,
+   "folk, singer-songwriter"
+  ],
+  [
+   "marcella",
+   "Marcella Hazan's tomato sauce",
+   "recipes",
+   "kevin",
+   11,
+   "Three ingredients: canned tomatoes, butter, half an onion. Simmer 45 minutes. It's absurd how good it is.",
+   null,
+   "pasta, easy, weeknight, classic"
+  ],
+  [
+   "muffins",
+   "Smitten Kitchen blueberry muffins",
+   "recipes",
+   "priya",
+   29,
+   "The crunchy sugar on top is the move. Use Maine wild blueberries if you can find them.",
+   null,
+   "baking, breakfast, blueberries"
+  ],
+  [
+   "chowder",
+   "Clam chowder, the not-too-thick kind",
+   "recipes",
+   "maggie",
+   110,
+   "My grandmother's way: salt pork, no flour, finish with a little butter. It should never hold a spoon up.",
+   null,
+   "soup, new england, winter"
+  ],
+  [
+   "ginger",
+   "Freeze your ginger",
+   "tips",
+   "sam",
+   6,
+   "Toss the whole knob in the freezer and grate it frozen with a microplane. No peeling, and it never goes moldy.",
+   null,
+   "kitchen, hack"
+  ],
+  [
+   "flights",
+   "Google Flights' date grid",
+   "tips",
+   "theo",
+   38,
+   "Click the dates box and switch to 'Date grid' to see a whole week of prices at once. Saved us $200 on Montréal.",
+   null,
+   "travel, money saver"
+  ],
+  [
+   "formaggio",
+   "Formaggio Kitchen",
+   "stores",
+   "jules",
+   58,
+   "Tell them what you're cooking and they'll build you a cheese plate that makes you look like you know what you're doing.",
+   {
+    "address": "244 Huron Ave",
+    "city": "Cambridge",
+    "state": "MA"
+   },
+   "cheese, gifts, specialty food"
+  ],
+  [
+   "brattle",
+   "Brattle Book Shop",
+   "stores",
+   "nora",
+   20,
+   "Three floors of used books, plus the outdoor lot where everything's a few dollars. Go on a sunny day.",
+   {
+    "address": "9 West St",
+    "city": "Boston",
+    "state": "MA"
+   },
+   "books, used, downtown"
+  ],
+  [
+   "beanboots",
+   "Get your L.L.Bean boots resoled",
+   "fashion",
+   "kevin",
+   44,
+   "Don't buy new ones. Send the old pair back and they'll put new bottoms on. Mine are on their second life.",
+   null,
+   "boots, winter, buy it for life"
+  ],
+  [
+   "heattech",
+   "Uniqlo Heattech under everything",
+   "fashion",
+   "sam",
+   88,
+   "From December to March this is my whole personality. Thin enough to wear under work clothes.",
+   null,
+   "winter, layers"
+  ]
+ ],
+ "COMMENTS": [
+  [
+   "neptune",
+   "theo",
+   1.8,
+   "Went Saturday at noon. The line was an hour. Was it worth it? ...Yes. Annoyingly yes."
+  ],
+  [
+   "neptune",
+   "priya",
+   1.5,
+   "The hot one with butter is the only correct answer. I will die on this hill."
+  ],
+  [
+   "neptune",
+   "kevin",
+   1.2,
+   "Row 34 is easier to get into if anyone's looking for a backup plan."
+  ],
+  [
+   "neptune",
+   "maggie",
+   1,
+   "Kevin, that's a whole separate recommendation. Add it!"
+  ],
+  [
+   "pepe",
+   "nora",
+   7,
+   "Sally's vs Pepe's. Let the fight begin."
+  ],
+  [
+   "pepe",
+   "kevin",
+   6.8,
+   "Pepe's. Not up for discussion. Okay fine, we can do both on the same trip."
+  ],
+  [
+   "pepe",
+   "jules",
+   4,
+   "Went last weekend on the way back from NYC. Clam pizza changed my life a little."
+  ],
+  [
+   "slowhorses",
+   "maggie",
+   2.5,
+   "Started this on your recommendation and we've done two seasons in a week. Send help."
+  ],
+  [
+   "slowhorses",
+   "kevin",
+   2.1,
+   "Jackson Lamb is my spirit animal."
+  ],
+  [
+   "slowhorses",
+   "nora",
+   1.4,
+   "Okay okay, adding it to the list."
+  ],
+  [
+   "henwood",
+   "priya",
+   4.5,
+   "Did they still have the hen of the woods mushroom dish? That's the one I dream about."
+  ],
+  [
+   "henwood",
+   "jules",
+   4.2,
+   "Yes! We ordered two."
+  ],
+  [
+   "woodstock",
+   "theo",
+   10,
+   "Add Sugarbush Farm for maple tastings. The kids loved it."
+  ],
+  [
+   "woodstock",
+   "nora",
+   9.5,
+   "Ooh good one. Also the Woodstock Inn bar is very cozy for a nightcap."
+  ],
+  [
+   "marcella",
+   "sam",
+   9,
+   "Made this Sunday. My kid asked for seconds, which has never happened."
+  ],
+  [
+   "marcella",
+   "priya",
+   8,
+   "Do you use San Marzano? Or does it not matter?"
+  ],
+  [
+   "marcella",
+   "kevin",
+   7.5,
+   "I do, but honestly any good canned whole tomatoes work. It's the butter doing the heavy lifting."
+  ],
+  [
+   "holdovers",
+   "jules",
+   18,
+   "Watched it over the holidays and cried at the end. Perfect pick."
+  ],
+  [
+   "sarma",
+   "maggie",
+   0.6,
+   "We were there last month. Get the fried mussels."
+  ],
+  [
+   "ptown",
+   "sam",
+   22,
+   "Can confirm, went in November and had the whole beach to ourselves."
+  ],
+  [
+   "acadia",
+   "maggie",
+   90,
+   "Did the Beehive trail too. Not for anyone scared of heights!"
+  ]
+ ],
+ "RATINGS": {
+  "neptune": {
+   "maggie": 5,
+   "theo": 5,
+   "priya": 5,
+   "kevin": 4,
+   "sam": 4
+  },
+  "pepe": {
+   "kevin": 5,
+   "jules": 5,
+   "nora": 4,
+   "theo": 4
+  },
+  "alforno": {
+   "nora": 5,
+   "priya": 4,
+   "maggie": 5
+  },
+  "oleana": {
+   "priya": 5,
+   "jules": 4,
+   "nora": 4
+  },
+  "clamshack": {
+   "theo": 4,
+   "maggie": 4,
+   "kevin": 5
+  },
+  "henwood": {
+   "jules": 5,
+   "priya": 5
+  },
+  "sarma": {
+   "sam": 5,
+   "maggie": 4
+  },
+  "woodstock": {
+   "nora": 5,
+   "theo": 4,
+   "sam": 4
+  },
+  "acadia": {
+   "theo": 5,
+   "maggie": 5,
+   "priya": 5,
+   "kevin": 4
+  },
+  "block": {
+   "maggie": 4,
+   "jules": 5
+  },
+  "ptown": {
+   "jules": 5,
+   "sam": 4
+  },
+  "montreal": {
+   "priya": 5,
+   "theo": 4,
+   "nora": 5
+  },
+  "holdovers": {
+   "kevin": 5,
+   "jules": 5,
+   "maggie": 4,
+   "nora": 4
+  },
+  "pastlives": {
+   "priya": 5,
+   "nora": 4,
+   "jules": 3
+  },
+  "slowhorses": {
+   "sam": 5,
+   "maggie": 5,
+   "kevin": 5
+  },
+  "bear": {
+   "theo": 5,
+   "sam": 4,
+   "priya": 3
+  },
+  "shrinking": {
+   "maggie": 4,
+   "nora": 4
+  },
+  "khruangbin": {
+   "jules": 4,
+   "sam": 4
+  },
+  "carlile": {
+   "nora": 5,
+   "maggie": 4
+  },
+  "marcella": {
+   "kevin": 5,
+   "sam": 5,
+   "priya": 4
+  },
+  "muffins": {
+   "priya": 4,
+   "maggie": 5
+  },
+  "chowder": {
+   "maggie": 5,
+   "kevin": 4,
+   "theo": 5
+  },
+  "ginger": {
+   "sam": 4,
+   "priya": 5,
+   "nora": 4
+  },
+  "flights": {
+   "theo": 4,
+   "priya": 4
+  },
+  "formaggio": {
+   "jules": 5,
+   "priya": 4
+  },
+  "brattle": {
+   "nora": 4,
+   "jules": 4
+  },
+  "beanboots": {
+   "kevin": 5,
+   "theo": 4
+  },
+  "heattech": {
+   "sam": 4
+  }
+ },
+ "INTEREST": {
+  "henwood": [
+   "maggie",
+   "kevin",
+   "sam"
+  ],
+  "sarma": [
+   "priya",
+   "nora",
+   "theo"
+  ],
+  "woodstock": [
+   "maggie",
+   "priya",
+   "jules"
+  ],
+  "pepe": [
+   "maggie",
+   "sam",
+   "priya"
+  ],
+  "slowhorses": [
+   "nora",
+   "jules",
+   "priya"
+  ],
+  "ptown": [
+   "maggie",
+   "nora"
+  ],
+  "montreal": [
+   "kevin",
+   "sam"
+  ],
+  "alforno": [
+   "theo",
+   "jules"
+  ],
+  "pastlives": [
+   "kevin"
+  ],
+  "block": [
+   "theo",
+   "sam",
+   "nora"
+  ],
+  "acadia": [
+   "jules",
+   "nora"
+  ]
+ },
+ "PLANS": [
+  {
+   "key": "dinner",
+   "title": "Next Dinner Out",
+   "emoji": "🍽️",
+   "date": 16,
+   "by": "maggie",
+   "days": 4,
+   "description": "Somewhere we can actually hear each other talk. Saturday the week after next?",
+   "items": {
+    "sarma": [
+     "maggie",
+     "priya",
+     "sam"
+    ],
+    "henwood": [
+     "jules"
+    ],
+    "oleana": [
+     "priya",
+     "nora",
+     "kevin",
+     "maggie"
+    ],
+    "alforno": [
+     "nora"
+    ]
+   },
+   "comments": [
+    [
+     "maggie",
+     3.5,
+     "Oleana patio while it's still warm enough?"
+    ],
+    [
+     "kevin",
+     3.1,
+     "Henwood is three hours away, Jules. Bold."
+    ],
+    [
+     "jules",
+     2.9,
+     "A girl can dream."
+    ],
+    [
+     "priya",
+     1.2,
+     "I'm in for Oleana. I'll call about a table for eight."
+    ]
+   ]
+  },
+  {
+   "key": "trip",
+   "title": "Weekend Trip Ideas",
+   "emoji": "🧭",
+   "date": null,
+   "by": "theo",
+   "days": 20,
+   "description": "Spring or early summer. Ideally under four hours of driving.",
+   "items": {
+    "woodstock": [
+     "nora",
+     "theo",
+     "maggie"
+    ],
+    "block": [
+     "sam",
+     "jules",
+     "maggie",
+     "theo"
+    ],
+    "ptown": [
+     "jules"
+    ],
+    "montreal": [
+     "priya",
+     "kevin"
+    ]
+   },
+   "comments": [
+    [
+     "sam",
+     15,
+     "Block Island in June, bikes, done."
+    ],
+    [
+     "priya",
+     12,
+     "Montréal if everyone has a passport!"
+    ],
+    [
+     "theo",
+     6,
+     "Block Island is pulling ahead. Ferry tickets sell out, let's lock in a date soon."
+    ]
+   ]
+  },
+  {
+   "key": "movie",
+   "title": "Next Movie Night",
+   "emoji": "🍿",
+   "date": 5,
+   "by": "kevin",
+   "days": 8,
+   "description": "My place. I'll handle popcorn, someone else handle the wine.",
+   "items": {
+    "holdovers": [
+     "kevin",
+     "maggie"
+    ],
+    "pastlives": [
+     "priya"
+    ],
+    "slowhorses": [
+     "sam",
+     "nora",
+     "jules"
+    ]
+   },
+   "comments": [
+    [
+     "sam",
+     6,
+     "Slow Horses marathon counts as a movie night, right?"
+    ],
+    [
+     "kevin",
+     5.5,
+     "It does if we do the whole first season."
+    ]
+   ]
+  }
+ ]
+}
