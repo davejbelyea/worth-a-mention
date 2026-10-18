@@ -106,11 +106,14 @@ function can_edit_rec(array $user, string $recId): bool {
 }
 
 // ---------- Uploads ----------
-const UPLOAD_TYPES = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/webp' => 'webp', 'image/gif' => 'gif', 'image/heic' => 'heic', 'image/avif' => 'avif'];
+const UPLOAD_TYPES = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/webp' => 'webp', 'image/gif' => 'gif', 'image/heic' => 'heic', 'image/heif' => 'heif', 'image/avif' => 'avif'];
 
 /** Saves one entry from $_FILES and returns the stored filename, or null. */
 function save_upload(array $f): ?string {
-    if (($f['error'] ?? 1) !== UPLOAD_ERR_OK || !$f['size'] || $f['size'] > 12 * 1024 * 1024) return null;
+    if (($f['error'] ?? 1) !== UPLOAD_ERR_OK || !$f['size'] || $f['size'] > 20 * 1024 * 1024) {
+        if (($f['error'] ?? 4) !== UPLOAD_ERR_NO_FILE) error_log('[upload] skipped ' . ($f['name'] ?? '?') . ' error=' . ($f['error'] ?? '?') . ' size=' . ($f['size'] ?? 0));
+        return null;
+    }
     $type = (new finfo(FILEINFO_MIME_TYPE))->file($f['tmp_name']);
     $ext = UPLOAD_TYPES[$type] ?? null;
     if (!$ext) return null;

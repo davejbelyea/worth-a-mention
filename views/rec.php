@@ -134,16 +134,29 @@ $swap = 'hx-target="#rec-side" hx-select="#rec-side" hx-swap="outerHTML"';
     </aside>
 
     <div class="min-w-0 lg:col-start-1">
-      <?php if ($gallery): ?>
-      <section class="mb-8">
+      <section id="photos" class="mb-8 scroll-mt-24">
         <h2 class="eyebrow mb-3">Photos</h2>
+        <?php if ($photoError): ?><p class="mb-3 rounded-xl border border-danger/30 bg-danger/10 p-3 text-sm text-danger"><?= $photoError === 1 ? "That photo didn't upload." : "$photoError photos didn't upload." ?> Photos need to be JPG, PNG, WebP or GIF and under 20 MB. A screenshot of the photo works too.</p><?php endif ?>
+        <?php if ($photosAdded): ?><p class="mb-3 text-sm font-semibold text-vote">✓ <?= $photosAdded === 1 ? 'Photo added.' : "$photosAdded photos added." ?></p><?php endif ?>
         <div class="no-scrollbar -mx-4 flex gap-3 overflow-x-auto px-4 sm:mx-0 sm:grid sm:grid-cols-3 sm:px-0">
           <?php foreach ($gallery as $p): ?>
-            <a href="/uploads/<?= h($p['file']) ?>" target="_blank" rel="noreferrer" class="shrink-0"><img src="/uploads/<?= h($p['file']) ?>" alt="" class="aspect-square w-40 rounded-2xl border border-line object-cover sm:w-full"></a>
+            <div class="relative shrink-0">
+              <a href="/uploads/<?= h($p['file']) ?>" target="_blank" rel="noreferrer"><img src="/uploads/<?= h($p['file']) ?>" alt="" class="aspect-square w-40 rounded-2xl border border-line object-cover sm:w-full"></a>
+              <?php if ($p['added_by'] === $me['id'] || $canEdit): ?>
+                <form method="post" action="/photos/<?= h($p['id']) ?>/delete" data-confirm="Remove this photo?" class="absolute right-2 top-2"><?= csrf_field() ?><button class="flex size-7 items-center justify-center rounded-full bg-white/90 text-xs shadow ring-1 ring-line hover:text-danger" aria-label="Remove photo">✕</button></form>
+              <?php endif ?>
+            </div>
           <?php endforeach ?>
+          <form method="post" action="/r/<?= h($rec['id']) ?>/photos" enctype="multipart/form-data" data-photo-upload class="shrink-0">
+            <?= csrf_field() ?>
+            <label class="flex aspect-square w-40 cursor-pointer flex-col items-center justify-center gap-1 rounded-2xl border border-dashed border-line-strong text-sm font-semibold text-mute transition hover:border-gold/50 hover:text-gold sm:w-full">
+              <span class="text-2xl">＋</span><span data-upload-label>Add photos</span>
+              <input type="file" name="photos[]" accept="image/*" multiple class="sr-only">
+            </label>
+            <noscript><button class="btn-ghost mt-2 w-full text-xs">Upload</button></noscript>
+          </form>
         </div>
       </section>
-      <?php endif ?>
 
       <?php if ($rec['description'] || $rec['tags'] || $rec['links']): ?>
       <section class="mb-8 space-y-4">

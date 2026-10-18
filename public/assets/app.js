@@ -59,6 +59,49 @@
   document.addEventListener('htmx:afterSwap', () => $$('details[data-autoclose][open]').forEach((d) => d.removeAttribute('open')));
   document.addEventListener('htmx:responseError', () => alert("That didn't save. Check your connection and try again."));
 
+  // Shrinks big phone photos before upload so it stays quick on cellular and under the server's size limit.
+  async function shrink(file) {
+    if (!file.type.startsWith('image/') || file.type === 'image/gif' || file.size < 600000) return file;
+    try {
+      const bmp = await createImageBitmap(file);
+      const scale = Math.min(1, 1600 / Math.max(bmp.width, bmp.height));
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(bmp.width * scale);
+      canvas.height = Math.round(bmp.height * scale);
+      canvas.getContext('2d').drawImage(bmp, 0, 0, canvas.width, canvas.height);
+      // Stay under 1.8 MB so it fits even a host's default 2 MB upload limit.
+      let blob = null;
+      for (const q of [0.85, 0.72, 0.6, 0.45]) {
+        blob = await new Promise((r) => canvas.toBlob(r, 'image/jpeg', q));
+        if (!blob || blob.size < 1_800_000) break;
+      }
+      return blob ? new File([blob], file.name.replace(/\.\w+$/, '') + '.jpg', { type: 'image/jpeg' }) : file;
+    } catch {
+      return file;
+    }
+  }
+
+  // "Add photos" on a recommendation page: shrink, then upload straight away.
+  document.addEventListener('change', async (e) => {
+    const form = e.target.closest('form[data-photo-upload]');
+    if (!form || !e.target.files?.length) return;
+    const label = $('[data-upload-label]', form);
+    label.textContent = 'Uploading…';
+    const body = new FormData(form);
+    body.delete('photos[]');
+    for (const f of await Promise.all([...e.target.files].slice(0, 8).map(shrink))) body.append('photos[]', f, f.name);
+    try {
+      const res = await fetch(form.action, { method: 'POST', body });
+      if (!res.ok || res.url.endsWith('/photos')) {
+        label.textContent = res.status === 413 ? 'Too big. Try a smaller photo' : "Didn't upload. Try again";
+        return;
+      }
+      window.location.href = res.url.split('#')[0] + '#photos';
+    } catch {
+      label.textContent = "Didn't upload. Try again";
+    }
+  });
+
   // ---------------- The add / edit form ----------------
   const form = $('#rec-form');
   if (!form) return;
@@ -176,21 +219,6 @@
 
   // Photos: shrink big phone photos before upload and show previews.
   const photoInput = $('[data-add-photo] input', form);
-  async function shrink(file) {
-    if (!file.type.startsWith('image/') || file.type === 'image/gif' || file.size < 600000) return file;
-    try {
-      const bmp = await createImageBitmap(file);
-      const scale = Math.min(1, 1800 / Math.max(bmp.width, bmp.height));
-      const canvas = document.createElement('canvas');
-      canvas.width = Math.round(bmp.width * scale);
-      canvas.height = Math.round(bmp.height * scale);
-      canvas.getContext('2d').drawImage(bmp, 0, 0, canvas.width, canvas.height);
-      const blob = await new Promise((r) => canvas.toBlob(r, 'image/jpeg', 0.85));
-      return blob ? new File([blob], file.name.replace(/\.\w+$/, '') + '.jpg', { type: 'image/jpeg' }) : file;
-    } catch {
-      return file;
-    }
-  }
   photoInput.addEventListener('change', async () => {
     const files = await Promise.all([...photoInput.files].slice(0, 8).map(shrink));
     try {

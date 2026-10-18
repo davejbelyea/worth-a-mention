@@ -12,7 +12,15 @@ function dispatch(string $method, string $path): void {
         install_page($method);
         return;
     }
-    if ($method === 'POST') check_csrf();
+    if ($method === 'POST') {
+        // A file bigger than the server allows wipes out the whole form, so explain that instead of a confusing error.
+        if (!$_POST && !$_FILES && (int) ($_SERVER['CONTENT_LENGTH'] ?? 0) > 0) {
+            http_response_code(413);
+            view('message', ['title' => 'Too big', 'emoji' => '📸', 'heading' => 'That photo was too big to upload', 'body' => 'Try a smaller photo, or a screenshot of it. Go back and give it another go.']);
+            return;
+        }
+        check_csrf();
+    }
     run_scheduler_if_due();
 
     $routes = [
@@ -26,7 +34,7 @@ function dispatch(string $method, string $path): void {
         ['GET', '/add', 'page_add'], ['POST', '/add', 'action_save_rec'],
         ['GET', '/r/([\w-]+)', 'page_rec'], ['GET', '/r/([\w-]+)/edit', 'page_edit_rec'], ['POST', '/r/([\w-]+)/edit', 'action_save_rec'],
         ['POST', '/r/([\w-]+)/delete', 'action_delete_rec'], ['POST', '/r/([\w-]+)/rate', 'action_rate'], ['POST', '/r/([\w-]+)/interest', 'action_interest'],
-        ['POST', '/r/([\w-]+)/comment', 'action_comment'], ['POST', '/comments/([\w-]+)/delete', 'action_delete_comment'], ['POST', '/comments/([\w-]+)/edit', 'action_edit_comment'],
+        ['POST', '/r/([\w-]+)/comment', 'action_comment'], ['POST', '/r/([\w-]+)/photos', 'action_add_photos'], ['POST', '/photos/([\w-]+)/delete', 'action_delete_photo'], ['POST', '/comments/([\w-]+)/delete', 'action_delete_comment'], ['POST', '/comments/([\w-]+)/edit', 'action_edit_comment'],
         ['GET', '/plans', 'page_plans'], ['GET', '/plans/new', 'page_new_plan'], ['POST', '/plans/save', 'action_save_plan'],
         ['GET', '/plans/([\w-]+)', 'page_plan'], ['GET', '/plans/([\w-]+)/edit', 'page_edit_plan'], ['POST', '/plans/([\w-]+)/delete', 'action_delete_plan'],
         ['POST', '/plans/([\w-]+)/add', 'action_add_to_plan'], ['POST', '/plans/([\w-]+)/decide', 'action_decide'], ['POST', '/plans/([\w-]+)/comment', 'action_plan_comment'],
@@ -238,8 +246,35 @@ function action_delete_rec(string $id): void {
 function page_rec(string $id): void {
     $me = require_user();
     $rec = get_rec($id) ?? not_found();
-    view('rec', ['me' => $me, 'title' => $rec['title'], 'rec' => $rec, 'added' => get('added') !== '',
+    view('rec', ['me' => $me, 'title' => $rec['title'], 'rec' => $rec, 'added' => get('added') !== '', 'photoError' => (int) get('photo_error'), 'photosAdded' => (int) get('photos'),
         'openPlans' => all("SELECT id, title, emoji FROM plans WHERE status = 'open' ORDER BY updated_at DESC")]);
+}
+
+function action_add_photos(string $id): void {
+    $me = require_user();
+    if (!val('SELECT id FROM recs WHERE id = ?', [$id])) not_found();
+    $sort = (int) val('SELECT COUNT(*) FROM rec_photos WHERE rec_id = ?', [$id]);
+    $added = $failed = 0;
+    foreach (array_slice(files_list('photos'), 0, 8) as $f) {
+        if ($name = save_upload($f)) {
+            insert('rec_photos', ['id' => new_id(), 'rec_id' => $id, 'file' => $name, 'added_by' => $me['id'], 'sort' => $sort++, 'created_at' => now()]);
+            $added++;
+        } elseif (($f['error'] ?? 4) !== UPLOAD_ERR_NO_FILE) {
+            $failed++;
+        }
+    }
+    q('UPDATE recs SET updated_at = ? WHERE id = ?', [now(), $id]);
+    redirect("/r/$id?" . ($failed ? 'photo_error=' . $failed : 'photos=' . $added) . '#photos');
+}
+
+function action_delete_photo(string $pid): void {
+    $me = require_user();
+    $p = one('SELECT * FROM rec_photos WHERE id = ?', [$pid]) ?? not_found();
+    if ($p['added_by'] === $me['id'] || can_edit_rec($me, $p['rec_id'])) {
+        q('DELETE FROM rec_photos WHERE id = ?', [$pid]);
+        delete_upload($p['file']);
+    }
+    redirect("/r/{$p['rec_id']}#photos");
 }
 
 function action_rate(string $id): void {
