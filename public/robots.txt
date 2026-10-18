@@ -1,4 +1,2 @@
 User-agent: *
 Disallow: /
-
-<!-- Auto-deploy test: 2026-10-18T12:57:28Z -->

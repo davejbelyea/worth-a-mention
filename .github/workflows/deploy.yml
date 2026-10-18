@@ -22,15 +22,19 @@ jobs:
           APP_ID: ${{ secrets.CLOUDWAYS_APP_ID }}
         run: |
           if [ -z "$API_KEY" ]; then echo "Cloudways secrets aren't set yet, skipping."; exit 0; fi
-          TOKEN=$(curl -sf -X POST https://api.cloudways.com/api/v1/oauth/access_token \
-            --data-urlencode "email=$EMAIL" --data-urlencode "api_key=$API_KEY" | jq -r .access_token)
-          if [ -z "$TOKEN" ] || [ "$TOKEN" = "null" ]; then echo "Cloudways sign-in failed. Check the email and API key secrets."; exit 1; fi
-          curl -sf -X POST https://api.cloudways.com/api/v1/git/pull \
+          AUTH=$(curl -s -X POST https://api.cloudways.com/api/v1/oauth/access_token \
+            --data-urlencode "email=$EMAIL" --data-urlencode "api_key=$API_KEY")
+          TOKEN=$(echo "$AUTH" | jq -r '.access_token // empty' 2>/dev/null)
+          if [ -z "$TOKEN" ]; then echo "::error::Cloudways sign-in failed. Check CLOUDWAYS_EMAIL and CLOUDWAYS_API_KEY. Cloudways said: $(echo "$AUTH" | head -c 300)"; exit 1; fi
+          PULL=$(curl -s -w ' [HTTP %{http_code}]' -X POST https://api.cloudways.com/api/v1/git/pull \
             -H "Authorization: Bearer $TOKEN" \
             --data-urlencode "server_id=$SERVER_ID" \
             --data-urlencode "app_id=$APP_ID" \
             --data-urlencode "git_url=git@github.com:${{ github.repository }}.git" \
             --data-urlencode "branch_name=main" \
-            --data-urlencode "deploy_path=public_html"
-          echo
-          echo "Cloudways is pulling the latest code."
+            --data-urlencode "deploy_path=public_html")
+          echo "$PULL"
+          case "$PULL" in
+            *"[HTTP 2"*) echo "::notice::Cloudways is pulling the latest code." ;;
+            *) echo "::error::Cloudways didn't accept the update. Check the server and app IDs, and that Deployment via Git is set up for this app. Cloudways said: $(echo "$PULL" | head -c 300)"; exit 1 ;;
+          esac
