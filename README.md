@@ -53,7 +53,7 @@ Then click **Application Settings → Reset File Permission** once so the site c
 Every push to `main` can update the live site by itself. Set up Git deployment (step 3) first, then in GitHub go to **Settings → Secrets and variables → Actions** and add four secrets:
 
 - `CLOUDWAYS_EMAIL`: the email you log in to Cloudways with
-- `CLOUDWAYS_API_KEY`: from Cloudways **API Integration** (in the top-right account menu) → Generate Key
+- `CLOUDWAYS_API_KEY`: from Cloudways **API Integration** (in the top-right account menu) → Generate Key. On a team account where that button is greyed out, ask the account owner for an access token and paste that here instead.
 - `CLOUDWAYS_SERVER_ID` and `CLOUDWAYS_APP_ID`: open the app in Cloudways and read them from the address bar: `…/server/SERVER_ID/application/APP_ID`
 
 The **Actions** tab in GitHub shows each update.
