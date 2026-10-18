@@ -16,7 +16,7 @@ export default async function Preview() {
       <DigestView data={p.data} header={
         <>
           <div className="text-xs text-mute">{formatDay(p.issueDate, { weekday: "long", month: "long", day: "numeric" })}</div>
-          <h1 className="mt-2 font-display text-[40px] leading-none tracking-tight">Worth a Mention</h1>
+          <h1 className="mt-2 font-display text-[30px] leading-none tracking-tight">Worth a Mention</h1>
           <p className="mt-1.5 text-sm text-gold">Good things. Worth remembering.</p>
         </>
       } />

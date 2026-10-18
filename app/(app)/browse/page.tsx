@@ -27,7 +27,7 @@ export default async function Browse({ searchParams }: { searchParams: Promise<S
     <div>
       <div className="mb-5">
         <p className="eyebrow mb-1.5">{sp.q ? "Search" : "Browse"}</p>
-        <h1 className="font-display text-[34px] leading-[1.05] tracking-tight sm:text-[42px]">
+        <h1 className="font-display text-[26px] leading-[1.05] tracking-tight sm:text-[32px]">
           {sp.q ? <>Results for &ldquo;{sp.q}&rdquo;</> : cat ? <>{cat.emoji} {cat.name}</> : sp.tag ? <>#{sp.tag}</> : "Everything worth a mention"}
         </h1>
       </div>

@@ -53,7 +53,7 @@ export default async function PlanPage({ params }: { params: Promise<{ id: strin
           <span className="flex size-14 items-center justify-center rounded-2xl border border-line bg-surface text-3xl">{plan.emoji}</span>
           {plan.is_sample ? <SampleBadge /> : null}
         </div>
-        <h1 className="mt-4 font-display text-[40px] leading-[1.02] tracking-tight sm:text-[52px]">{plan.title}</h1>
+        <h1 className="mt-4 font-display text-[30px] leading-[1.02] tracking-tight sm:text-[38px]">{plan.title}</h1>
         <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-mute">
           {plan.target_date && <span>🗓️ {formatDay(plan.target_date, { weekday: "long", month: "long", day: "numeric" })}</span>}
           <span className="flex items-center gap-1.5"><Avatar name={plan.creator} image={plan.creator_image} size={18} /> Started by {plan.creator?.split(" ")[0] || "someone"}</span>

@@ -48,7 +48,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ w
         </div>
       )}
       <div className="mb-6">
-        <h1 className="font-display text-[38px] leading-[1.05] tracking-tight sm:text-[48px]">{greeting(me.name)}</h1>
+        <h1 className="font-display text-[30px] leading-[1.05] tracking-tight sm:text-[36px]">{greeting(me.name)}</h1>
         <p className="mt-2 text-[15px] text-mute">{sub}</p>
       </div>
 

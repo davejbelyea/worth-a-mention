@@ -47,7 +47,7 @@ export default async function RecPage({ params, searchParams }: { params: Promis
       <div className="grid gap-8 lg:grid-cols-[1fr_340px] lg:gap-10">
         <div className="min-w-0">
           {hero && (
-            <div className="mb-6 overflow-hidden rounded-3xl border border-line">
+            <div className="mb-6 overflow-hidden rounded-3xl">
               <Cover src={hero} emoji={rec.cat_emoji} className="aspect-[16/9] w-full" />
             </div>
           )}
@@ -55,7 +55,7 @@ export default async function RecPage({ params, searchParams }: { params: Promis
             <span className="chip pointer-events-none">{rec.cat_emoji} {rec.cat_name || "Other"}</span>
             {rec.is_sample ? <SampleBadge /> : null}
           </div>
-          <h1 className="mt-3 font-display text-[40px] leading-[1.02] tracking-tight sm:text-[52px]">{rec.title}</h1>
+          <h1 className="mt-3 font-display text-[30px] leading-[1.02] tracking-tight sm:text-[38px]">{rec.title}</h1>
           <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-mute">
             {place && (map ? <a href={map} target="_blank" rel="noreferrer" className="hover:text-gold">📍 {rec.place_name && rec.place_name !== rec.title ? `${rec.place_name}, ` : ""}{place} ↗</a> : <span>📍 {place}</span>)}
             {rec.url && <a href={rec.url} target="_blank" rel="noreferrer" className="hover:text-gold">🔗 {rec.site_name || hostOf(rec.url)} ↗</a>}
@@ -70,7 +70,7 @@ export default async function RecPage({ params, searchParams }: { params: Promis
               </div>
             </div>
             {rec.why ? (
-              <p className="mt-4 whitespace-pre-wrap font-display text-[22px] leading-snug text-ink/95">&ldquo;{rec.why}&rdquo;</p>
+              <p className="mt-4 whitespace-pre-wrap text-[19px] font-medium leading-relaxed text-ink">&ldquo;{rec.why}&rdquo;</p>
             ) : (
               <p className="mt-4 text-sm text-mute">No notes, just a strong hunch it&apos;s worth your time.</p>
             )}
@@ -128,7 +128,7 @@ export default async function RecPage({ params, searchParams }: { params: Promis
           <p className="eyebrow">Group rating</p>
           <div className="mt-3 flex items-center gap-5">
             <div>
-              <div className="font-display text-[56px] leading-none tabular-nums">{rec!.avg_rating ? rec!.avg_rating.toFixed(1) : "–"}</div>
+              <div className="font-display text-[48px] leading-none tabular-nums">{rec!.avg_rating ? rec!.avg_rating.toFixed(1) : "–"}</div>
               <div className="mt-1 text-xs text-mute">{rec!.rating_count} {rec!.rating_count === 1 ? "rating" : "ratings"}</div>
             </div>
             <div className="flex-1 space-y-1">

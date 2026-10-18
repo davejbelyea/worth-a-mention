@@ -32,7 +32,7 @@ Until email is connected, every email the site would send gets printed in the se
 
 ---
 
-## Step 1: Put it online (Railway)
+## Step 1, option A: Put it online with Railway
 
 1. Put this folder in a GitHub repository (private is fine).
 2. Go to [railway.com](https://railway.com), sign in with GitHub, choose **New Project → Deploy from GitHub repo**, and pick the repo.
@@ -45,6 +45,25 @@ Until email is connected, every email the site would send gets printed in the se
 5. Railway builds and starts the site on its own. Visit the address, enter your email, and grab your sign-in link from the **Deploy Logs** (until email is connected).
 
 Any host that runs Node.js 20.9+ with a persistent disk works too (Render, Fly.io, a small server). The commands are `npm install`, `npm run build`, `npm start`.
+
+## Step 1, option B: Put it online with Cloudways
+
+Cloudways runs Node.js apps like this one through its newer **Velocity** product (it's labeled "Public Preview" as of October 2026). You can use the free address Cloudways gives you until you buy a domain.
+
+1. In the Cloudways console, open **Velocity → Get Started** and pick the **Starter** plan (about $20/month, with a 3-day free trial).
+2. Click **Connect Via Git**, sign in with the GitHub account that owns `worth-a-mention`, and choose the repo and the `main` branch.
+3. Cloudways should detect Next.js on its own and pick the **Next.js SSR** preset. If it asks, use build command `npm run build` and start command `npm start`, and Node **22**.
+4. Click **Deploy Now**. When it finishes, copy the **Application URL** from the app's **Overview** tab. That's your temporary web address.
+5. Open the app's **environment variables** and add:
+   - `APP_URL` = that Application URL, starting with `https://`, no slash at the end
+   - `ADMIN_EMAIL` = your email
+   - `CRON_SECRET` = any long random phrase
+   - Leave `DATA_DIR` out for now (the app keeps its data in a `data` folder inside the app)
+   Saving restarts the app.
+6. Visit the address and type in your email. Until email is hooked up, your sign-in link shows up in the app's **logs**.
+7. When you add Google sign-in later, use `https://YOUR-CLOUDWAYS-ADDRESS/auth/google/callback` as the redirect address. When you buy a domain, update `APP_URL` and the Google redirect to match.
+
+**One thing to confirm with Cloudways before you invite everyone.** This app saves posts and photos as files on the server. Cloudways' Velocity pages don't say whether those files survive a redeploy (each time you push new code). Ask their support chat: *"Do files my Node app writes inside its folder persist across redeploys and restarts, and is there a persistent storage path I should use?"* If they give you a path, set `DATA_DIR` to it. If the answer is no, let us know. The app can be switched to their PostgreSQL database plus photo storage so nothing gets lost.
 
 ## Step 2: Google sign-in
 

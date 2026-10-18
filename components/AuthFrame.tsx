@@ -1,14 +1,14 @@
 export function AuthFrame({ children }: { children: React.ReactNode }) {
   return (
     <main className="relative flex min-h-dvh items-center justify-center overflow-hidden px-4 py-12">
-      <div aria-hidden className="pointer-events-none absolute -top-40 left-1/2 h-[480px] w-[720px] -translate-x-1/2 rounded-full bg-gold/[0.07] blur-3xl" />
+      <div aria-hidden className="pointer-events-none absolute -top-40 left-1/2 h-[480px] w-[720px] -translate-x-1/2 rounded-full bg-[#ffe1e3] opacity-70 blur-3xl" />
       <div className="relative w-full max-w-sm">
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-5 flex size-14 items-center justify-center rounded-2xl border border-line bg-surface">
+          <div className="mx-auto mb-5 flex size-16 items-center justify-center rounded-2xl bg-white shadow-[0_6px_20px_rgba(0,0,0,0.08)]">
             <Logo className="size-8" />
           </div>
-          <h1 className="font-display text-[40px] leading-none tracking-tight">Worth a Mention</h1>
-          <p className="mt-3 text-sm text-mute">Good things. Worth remembering.</p>
+          <h1 className="font-display text-[32px] leading-none">Worth a Mention</h1>
+          <p className="mt-3 text-[15px] text-mute">Good things. Worth remembering.</p>
         </div>
         {children}
       </div>

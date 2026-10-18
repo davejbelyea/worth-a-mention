@@ -26,7 +26,7 @@ export default async function Edition({ params }: { params: Promise<{ id: string
       <DigestView data={data} header={
         <>
           <div className="flex items-center gap-2 text-xs text-mute">No. {n.edition} · {formatDay(n.issue_date, { weekday: "long", month: "long", day: "numeric", year: "numeric" })} {n.is_sample ? <SampleBadge /> : null}</div>
-          <h1 className="mt-2 font-display text-[40px] leading-none tracking-tight">Worth a Mention</h1>
+          <h1 className="mt-2 font-display text-[30px] leading-none tracking-tight">Worth a Mention</h1>
           <p className="mt-1.5 text-sm text-gold">Good things. Worth remembering.</p>
         </>
       } />

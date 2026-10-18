@@ -27,7 +27,7 @@ export default async function Me({ searchParams }: { searchParams: Promise<{ sav
             </div>
             <p className="text-xs text-mute">Signed in as {me.email}</p>
             <label className="flex items-start gap-3 text-sm">
-              <input type="checkbox" name="email_digest" defaultChecked={Boolean(me.email_digest)} className="mt-0.5 size-4 accent-[#e8b86a]" />
+              <input type="checkbox" name="email_digest" defaultChecked={Boolean(me.email_digest)} className="mt-0.5 size-4 accent-[#e5484d]" />
               <span>Email me the Thursday newsletter<span className="block text-xs text-mute">It&apos;s always in the archive either way.</span></span>
             </label>
             <button className="btn-primary w-full">Save</button>

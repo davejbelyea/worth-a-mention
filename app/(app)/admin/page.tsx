@@ -124,7 +124,7 @@ async function Categories() {
               <input type="hidden" name="id" value={c.id} />
               <input name="emoji" defaultValue={c.emoji} className="field w-14 px-2 text-center" aria-label="Emoji" />
               <input name="name" defaultValue={c.name} className="field min-w-0 flex-1" aria-label="Name" />
-              <label className="flex items-center gap-1.5 text-xs text-mute"><input type="checkbox" name="has_location" defaultChecked={Boolean(c.has_location)} className="accent-[#e8b86a]" /> Location</label>
+              <label className="flex items-center gap-1.5 text-xs text-mute"><input type="checkbox" name="has_location" defaultChecked={Boolean(c.has_location)} className="accent-[#e5484d]" /> Location</label>
               <button className="btn-ghost h-9 px-3 text-xs">Save</button>
             </form>
             <div className="flex items-center gap-1">
@@ -140,7 +140,7 @@ async function Categories() {
         <form action={A.saveCategory} className="flex flex-wrap items-center gap-2">
           <input name="emoji" placeholder="🎲" className="field w-14 px-2 text-center" aria-label="Emoji" />
           <input name="name" required placeholder="Board Games" className="field min-w-0 flex-1" aria-label="Category name" />
-          <label className="flex items-center gap-1.5 text-xs text-mute"><input type="checkbox" name="has_location" className="accent-[#e8b86a]" /> Has a location</label>
+          <label className="flex items-center gap-1.5 text-xs text-mute"><input type="checkbox" name="has_location" className="accent-[#e5484d]" /> Has a location</label>
           <button className="btn-primary">Add</button>
         </form>
         <p className="mt-2 text-xs text-faint">&ldquo;Location&rdquo; shows the address fields and map link on that category&apos;s form.</p>
@@ -161,7 +161,7 @@ async function Newsletter() {
         <p className="mb-4 text-sm text-mute">The digest goes out every Thursday, Eastern time. It covers everything since the last edition.</p>
         <form action={A.saveDigestSettings} className="card space-y-4 p-5">
           <label className="flex items-center gap-3 text-sm">
-            <input type="checkbox" name="digest_enabled" defaultChecked={enabled === "1"} className="size-4 accent-[#e8b86a]" />
+            <input type="checkbox" name="digest_enabled" defaultChecked={enabled === "1"} className="size-4 accent-[#e5484d]" />
             Send the newsletter automatically
           </label>
           <div className="flex flex-wrap items-center gap-3">
