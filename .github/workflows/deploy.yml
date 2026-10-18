@@ -1,0 +1,36 @@
+# Every push to main tells Cloudways to pull the latest code, so the live site updates on its own.
+# Needs four repository secrets (Settings → Secrets and variables → Actions):
+#   CLOUDWAYS_EMAIL, CLOUDWAYS_API_KEY, CLOUDWAYS_SERVER_ID, CLOUDWAYS_APP_ID
+name: Deploy to Cloudways
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency: deploy
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ask Cloudways to pull the latest code
+        env:
+          EMAIL: ${{ secrets.CLOUDWAYS_EMAIL }}
+          API_KEY: ${{ secrets.CLOUDWAYS_API_KEY }}
+          SERVER_ID: ${{ secrets.CLOUDWAYS_SERVER_ID }}
+          APP_ID: ${{ secrets.CLOUDWAYS_APP_ID }}
+        run: |
+          if [ -z "$API_KEY" ]; then echo "Cloudways secrets aren't set yet, skipping."; exit 0; fi
+          TOKEN=$(curl -sf -X POST https://api.cloudways.com/api/v1/oauth/access_token \
+            --data-urlencode "email=$EMAIL" --data-urlencode "api_key=$API_KEY" | jq -r .access_token)
+          if [ -z "$TOKEN" ] || [ "$TOKEN" = "null" ]; then echo "Cloudways sign-in failed. Check the email and API key secrets."; exit 1; fi
+          curl -sf -X POST https://api.cloudways.com/api/v1/git/pull \
+            -H "Authorization: Bearer $TOKEN" \
+            --data-urlencode "server_id=$SERVER_ID" \
+            --data-urlencode "app_id=$APP_ID" \
+            --data-urlencode "git_url=git@github.com:${{ github.repository }}.git" \
+            --data-urlencode "branch_name=main" \
+            --data-urlencode "deploy_path=public_html"
+          echo
+          echo "Cloudways is pulling the latest code."
