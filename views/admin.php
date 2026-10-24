@@ -10,6 +10,12 @@ $secret = fn(string $k) => setting($k) !== '' ? '••••••••' : '';
     <?php endforeach ?>
   </div>
   <?php if ($msg): ?><p class="mb-6 rounded-xl border border-gold/30 bg-gold/[0.07] p-3 text-sm font-medium text-gold" role="status"><?= h($msg) ?></p><?php endif ?>
+  <?php if (!empty($memberLink)): ?>
+    <div class="mb-6 rounded-xl border border-gold/30 bg-gold/[0.07] p-3 text-sm" role="status" data-testid="member-link">
+      <p class="font-medium text-gold">Here's a sign-in link for <?= h($memberLink['name']) ?>. Text it to them. It works once and lasts 3 days.</p>
+      <div class="mt-2 flex gap-2"><input readonly value="<?= h($memberLink['url']) ?>" class="field text-xs" aria-label="Sign-in link"><button type="button" class="btn-ghost shrink-0" data-copy="<?= h($memberLink['url']) ?>">Copy</button></div>
+    </div>
+  <?php endif ?>
   <?php if (!email_enabled() && $tab !== 'connections'): ?>
     <p class="mb-6 rounded-xl border border-line bg-raised p-3 text-sm text-soft"><b class="text-ink">Email isn't connected yet.</b> Invitations, sign-in links and the newsletter are saved on the server instead of sent. You can copy invite links below and text them to people. To turn email on, add a Resend key under <a href="/admin?tab=connections" class="font-semibold text-gold">Connections</a>.</p>
   <?php endif ?>
@@ -73,6 +79,9 @@ $secret = fn(string $k) => setting($k) !== '' ? '••••••••' : '';
             </p>
             <p class="truncate text-xs text-mute"><?= h($m['email']) ?> · <?= plural((int) $m['recs'], 'rec') ?> · <?= $m['last_seen_at'] ? 'last in ' . time_ago($m['last_seen_at']) : 'joined ' . format_date($m['created_at']) ?></p>
           </div>
+          <?php if ($m['status'] === 'active' && !$m['is_sample'] && $m['id'] !== $me['id']): ?>
+            <?= post_button('/admin/member-link', 'Sign-in link', 'btn-ghost h-8 px-2.5 text-xs', ['id' => $m['id']]) ?>
+          <?php endif ?>
           <?php if ($m['id'] !== $me['id'] && $m['role'] !== 'admin'): ?>
             <?= $m['status'] === 'active'
               ? post_button('/admin/member-status', 'Remove', 'btn-quiet h-8 px-2.5 text-xs hover:text-danger', ['id' => $m['id'], 'status' => 'removed'], "Remove {$m['name']}? They'll be signed out and can't get back in. Their posts stay.")

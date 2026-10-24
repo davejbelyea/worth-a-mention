@@ -505,6 +505,11 @@ function action_admin(string $action): void {
         case 'open-signup':
             set_setting('open_signup', post('on') === '1' ? '1' : '0');
             $back('members', post('on') === '1' ? 'Sign-up is open. Anyone with an email can join.' : "Back to invite only. People who already joined stay members.");
+        case 'member-link':
+            $m = one("SELECT * FROM users WHERE id = ? AND status = 'active'", [post('id')]);
+            if (!$m) $back('members');
+            view('admin', ['me' => $me, 'title' => 'Group settings', 'tab' => 'members', 'msg' => '', 'memberLink' => ['name' => $m['name'], 'url' => new_login_link($m['email'], null, null, 3 * 86400)]]);
+            exit;
         case 'resend':
             if ($inv = one('SELECT * FROM invites WHERE id = ?', [post('id')])) {
                 q('UPDATE invites SET expires_at = ? WHERE id = ?', [gmdate('Y-m-d\TH:i:s.000\Z', time() + 14 * 86400), $inv['id']]);
