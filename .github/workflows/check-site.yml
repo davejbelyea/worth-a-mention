@@ -7,8 +7,9 @@ jobs:
       - name: Look at the sign-in page
         run: |
           URL="https://phpstack-1346101-6734352.cloudwaysapps.com"
-          curl -sS -D headers.txt -o login.html "$URL/login" || true
+          curl -sS -D headers.txt -c c.txt -b c.txt -o login.html "$URL/login" || true
+          TOKEN=$(grep -oE 'name="_csrf" value="[^"]+"' login.html | head -1 | sed -E 's/.*value="([^"]+)"/\1/')
           echo "::notice::Status and cache headers: $(grep -iE '^(HTTP|cache-control|x-cache|age|via|x-varnish)' headers.txt | tr -d '\r' | tr '\n' ' ')"
           echo "::notice::Footer line: $(grep -oE 'New here[^<]*' login.html | head -1)"
-          curl -sS -o join.html -X POST "$URL/login" -c c.txt -b c.txt --data-urlencode "email=wam-check-$(date +%s)@example.com" || true
+          curl -sS -o join.html -X POST "$URL/login" -c c.txt -b c.txt --data-urlencode "_csrf=$TOKEN" --data-urlencode "email=wam-check-$(date +%s)@example.com" || true
           echo "::notice::Stranger sign-in result: $(grep -oE '(guest list|Check your inbox|already has an account|couldn.t send|link directly|too many|Something went wrong)[^<]{0,40}' join.html | head -2 | tr '\n' ' ') size=$(wc -c < join.html)"
