@@ -55,5 +55,7 @@ jobs:
           done
           echo "::notice::Cloudways pull result: $RESULT"
           sleep 5
-          LIVE=$(curl -s "https://phpstack-${SERVER_ID}-${APP_ID}.cloudwaysapps.com/login" -D - | grep -ciE '^cache-control: private, no-store')
+          SITE="https://phpstack-${SERVER_ID}-${APP_ID}.cloudwaysapps.com"
+          echo "::notice::Files on server: deploy-check.txt says '$(curl -s "$SITE/deploy-check.txt?$(date +%s)" | head -c 60)'"
+          LIVE=$(curl -s "$SITE/login" -D - | grep -ciE '^cache-control: private, no-store' || true)
           if [ "$LIVE" = "1" ]; then echo "::notice::The live site is running the new code."; else echo "::warning::The live site still looks like old code. Try Deployment via Git → Pull in Cloudways to see the error."; fi
