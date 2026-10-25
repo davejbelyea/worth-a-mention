@@ -40,6 +40,20 @@ jobs:
             --data-urlencode "deploy_path=public_html")
           echo "$PULL"
           case "$PULL" in
-            *"[HTTP 2"*) echo "::notice::Cloudways is pulling the latest code." ;;
+            *"[HTTP 2"*) ;;
             *) echo "::error::Cloudways didn't accept the update (sign-in said: $(echo "$AUTH" | head -c 150)). Check the server and app IDs, and that Deployment via Git is set up for this app. Cloudways said: $(echo "$PULL" | head -c 300)"; exit 1 ;;
           esac
+          # Cloudways does the pull in the background. Wait for it and report what really happened.
+          OP=$(echo "${PULL% \[HTTP*}" | jq -r '.operation_id // empty' 2>/dev/null)
+          RESULT="no operation id returned: $(echo "$PULL" | head -c 200)"
+          for i in $(seq 1 24); do
+            [ -z "$OP" ] && break
+            sleep 5
+            STATUS=$(curl -s -H "Authorization: Bearer $TOKEN" "https://api.cloudways.com/api/v1/operation/$OP")
+            if [ "$(echo "$STATUS" | jq -r '.operation.is_completed // empty')" = "1" ]; then RESULT=$(echo "$STATUS" | jq -c '.operation | {status, message}'); break; fi
+            RESULT="still running: $(echo "$STATUS" | head -c 200)"
+          done
+          echo "::notice::Cloudways pull result: $RESULT"
+          sleep 5
+          LIVE=$(curl -s "https://phpstack-${SERVER_ID}-${APP_ID}.cloudwaysapps.com/login" -D - | grep -ciE '^cache-control: private, no-store')
+          if [ "$LIVE" = "1" ]; then echo "::notice::The live site is running the new code."; else echo "::warning::The live site still looks like old code. Try Deployment via Git → Pull in Cloudways to see the error."; fi
